@@ -5,8 +5,15 @@ var app = require('http').createServer(handler),
   SerialPort = require('serialport').SerialPort,
   // initialize serialport using the /dev/cu.usbmodem1411 serial port
   // remember to change this string if your arduino is using a different serial port
-  sp = new SerialPort('/dev/cu.usbmodem1411', {
-    baudRate: 115200
+  // To know your device on linux just execute this command line bellow
+  // dmesg | tail | grep tty
+  // Most important! To discover your device on the linux just execute on terminal this command line bellow
+  // dmesg | tail | grep tty
+  // In my case show: [30514.044931] cdc_acm 3-1.4:1.0: ttyACM0: USB ACM device
+
+
+  sp = new SerialPort('/dev/ttyACM0', {
+    baudRate: 9600
   }),
   // this var will contain the message string dispatched by arduino
   arduinoMessage = '',
@@ -18,9 +25,9 @@ var app = require('http').createServer(handler),
   readFile = function(pathname, res) {
     // an empty path returns client.html
     if (pathname === '/')
-      pathname = 'client.html';
+      pathname = '../client.html';
 
-    fs.readFile('client/' + pathname, function(err, data) {
+    fs.readFile('../client/' + pathname, function(err, data) {
       if (err) {
         console.log(err);
         res.writeHead(500);
